@@ -1,0 +1,17 @@
+{
+  "name": "football-player-quiz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "بازی آفلاین شناخت بازیکن فوتبال",
+  "scripts": {
+    "start": "npx http-server .",
+    "sync": "cap sync"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.4.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.3",
+    "http-server": "^14.1.1"
+  }
+}

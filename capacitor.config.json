@@ -1,1 +1,8 @@
-{"appId":"com.playerquiz.app","appName":"شناخت بازیکن","webDir":"www"}
+{
+  "appId": "com.prochat.playerquiz",
+  "appName": "شناخت بازیکن",
+  "webDir": ".",
+  "server": {
+    "androidScheme": "https"
+  }
+}

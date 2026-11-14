@@ -1,15 +1,13 @@
-# شناخت بازیکن (Player Quiz)
-بازی کاملاً آفلاین (HTML/CSS/JS + LocalStorage).
+# شناخت بازیکن
 
-## فایل‌هایی که باید خودتان اضافه کنید
-- `assets/home.webp` تصویر کامل صفحه اصلی (دکمه‌ها روی آن قرار دارند)
-- `assets/fonts/Vazirmatn.woff2` فونت فارسی (آفلاین)
+نسخه اولیه بازی فارسی و آفلاین.
 
-## ساخت APK
-```
-npm install
-npx cap add android
-npm run sync
-npx cap open android
-```
-`assets/reference/home-mockup.png` فقط مرجع طراحی است و وارد APK نمی‌شود.
+## اجرای وب
+فایل `index.html` را با یک وب‌سرور محلی باز کنید یا روی GitHub Pages منتشر کنید.
+
+## افزودن تصاویر
+- تصویر منو: `assets/images/entry-screen.webp`
+- تصاویر بازیکنان: پوشه `players/` با نام‌های داخل `players/README.txt`
+
+بازی از LocalStorage برای ذخیره سکه و مرحله فعلی استفاده می‌کند.
+هیچ سرویس آنلاین یا فونت خارجی لازم نیست.
