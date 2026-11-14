@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#061342">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>شناخت بازیکن | فوتبال کوییز</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="home-page">
+  <div class="home-backdrop" aria-hidden="true"></div>
+  <main class="home-shell">
+    <div class="home-art-wrap" id="homeArtWrap">
+      <img id="homeArtwork" class="home-art" src="assets/images/entry-screen.webp" alt="منوی بازی شناخت بازیکن" draggable="false">
+      <div class="hotspots">
+        <button class="hotspot start" data-action="start" aria-label="شروع بازی"></button>
+        <button class="hotspot stages" data-action="stages" aria-label="لیست مراحل"></button>
+        <button class="hotspot shop" data-action="shop" aria-label="فروشگاه"></button>
+        <button class="hotspot daily" data-action="daily" aria-label="جوایز روزانه"></button>
+        <button class="hotspot ranking" data-action="ranking" aria-label="رتبه بندی"></button>
+        <button class="hotspot items" data-action="items" aria-label="آیتم ها"></button>
+        <button class="hotspot help" data-action="help" aria-label="راهنما"></button>
+        <button class="hotspot achievements" data-action="achievements" aria-label="دستاوردها"></button>
+        <button class="hotspot about" data-action="about" aria-label="درباره بازی"></button>
+        <button class="hotspot share" data-action="share" aria-label="اشتراک گذاری"></button>
+        <button class="hotspot settings" data-action="settings" aria-label="تنظیمات"></button>
+        <button class="hotspot stats" data-action="stats" aria-label="آمار"></button>
+        <button class="hotspot wins" data-action="wins" aria-label="موفقیت ها"></button>
+        <button class="hotspot more" data-action="more" aria-label="بازی های بیشتر"></button>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="modal-backdrop" id="stageModal" hidden>
+    <section class="result-modal stage-modal">
+      <button class="close-modal" id="closeStages" aria-label="بستن">×</button>
+      <div class="result-icon">🏆</div>
+      <h2>لیست مراحل</h2>
+      <p>مرحله‌ای را برای بازی انتخاب کن.</p>
+      <div class="stage-grid" id="stageGrid"></div>
+    </section>
+  </div>
+
+  <script src="js/home.js"></script>
+</body>
+</html>

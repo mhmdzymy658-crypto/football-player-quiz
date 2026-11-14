@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#06144b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>بازی | شناخت بازیکن</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="game-page">
+  <main class="game-shell">
+    <header class="game-top">
+      <a class="back-btn" href="index.html" aria-label="بازگشت">❮</a>
+      <div class="stage-pill">مرحله <b id="stageNumber">۱</b><span id="stageTotal">/۵</span></div>
+      <div class="coin-pill">🪙 <b id="coinCount">۱۰۰۰</b></div>
+    </header>
+
+    <section class="timer-panel">
+      <div class="timer-label">زمان باقی‌مانده</div>
+      <div class="timer-track"><div id="timerBar" class="timer-fill"></div></div>
+      <div class="timer-number" id="timerNumber">۲۰</div>
+    </section>
+
+    <section class="player-card">
+      <div class="card-ribbon">ستاره فوتبال</div>
+      <div class="player-photo-frame">
+        <img id="playerPhoto" src="" alt="تصویر بازیکن" draggable="false">
+        <div class="photo-fallback" id="photoFallback">⚽</div>
+      </div>
+      <div class="question-title">این بازیکن کیست؟</div>
+      <div class="question-subtitle">از بین چهار گزینه، پاسخ درست را انتخاب کن</div>
+    </section>
+
+    <section class="answers" id="answers" aria-label="گزینه‌های پاسخ"></section>
+
+    <div class="game-actions">
+      <button class="help-btn" id="hintButton">💡 راهنمایی <small>(۵۰ سکه)</small></button>
+      <button class="next-btn" id="nextButton" disabled>سؤال بعدی ←</button>
+    </div>
+    <p class="feedback" id="feedback" aria-live="polite">برای پاسخ دادن یکی از گزینه‌ها را انتخاب کن.</p>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <div class="result-modal">
+      <div class="result-icon" id="resultIcon">🏆</div>
+      <h2 id="resultTitle">آفرین!</h2>
+      <p id="resultText"></p>
+      <button id="modalContinue">ادامه</button>
+    </div>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
