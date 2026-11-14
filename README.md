@@ -2,7 +2,7 @@
 بازی کاملاً آفلاین (HTML/CSS/JS + LocalStorage).
 
 ## فایل‌هایی که باید خودتان اضافه کنید
-- `assets/login-bg.png` پس‌زمینه صفحه اصلی
+- `assets/home.webp` تصویر کامل صفحه اصلی (دکمه‌ها روی آن قرار دارند)
 - `assets/fonts/Vazirmatn.woff2` فونت فارسی (آفلاین)
 
 ## ساخت APK
