@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#050d3a"><title>شناخت بازیکن - بازی</title>
+<style>
+:root{--gold:#ffb800;--blue:#1b4fe0}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+html,body{height:100%;overflow:hidden;background:#050d3a;color:#fff;font-family:Vazirmatn,Tahoma,system-ui,sans-serif}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+/* استادیوم شبانه: نورافکن‌ها + چمن راه‌راه */
+.game{position:fixed;inset:0;display:flex;flex-direction:column;gap:2dvh;padding:calc(env(safe-area-inset-top) + 8px) 12px calc(env(safe-area-inset-bottom) + 12px);
+ background:repeating-linear-gradient(90deg,#17883250 0 40px,#10702850 40px 80px) bottom/100% 38% no-repeat,
+ radial-gradient(ellipse at 15% 0,rgba(130,185,255,.75),transparent 42%),radial-gradient(ellipse at 85% 0,rgba(255,225,130,.55),transparent 42%),
+ linear-gradient(#0a2a9a,#050d3a 60%,#04200f)}
+/* بالای صفحه */
+.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;font-weight:800;font-size:14px;background:rgba(10,30,110,.65);border:1px solid #4a7dff;backdrop-filter:blur(6px)}
+.right{display:flex;gap:6px;align-items:center}.left{display:flex;justify-content:flex-end}
+.back{width:38px;height:38px;border-radius:12px;background:var(--blue);border:2px solid #6aa5ff;font-size:26px;line-height:1;box-shadow:0 3px 0 #051a66}
+.ring{position:relative;width:76px;height:76px;filter:drop-shadow(0 0 10px rgba(255,184,0,.6))}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}.ring circle{fill:rgba(5,13,58,.85);stroke-width:7}
+.ring .bg{stroke:#1b2f8a}.ring .fg{stroke:var(--gold);stroke-linecap:round;fill:none;transition:stroke .3s}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:26px;font-weight:900}
+.ring.low .fg{stroke:#ff4a4a}.ring.low b{color:#ff8a8a;animation:pulse .5s infinite alternate}
+@keyframes pulse{to{transform:scale(1.18)}}
+/* کادر عکس */
+.photo{flex:1;min-height:0;display:grid;place-items:center}
+.frame{position:relative;height:100%;max-height:100%;aspect-ratio:3/4;max-width:78vw;border-radius:26px;overflow:hidden;border:4px solid var(--gold);
+ background:radial-gradient(circle at 50% 30%,#2a5cff,#06154f);box-shadow:0 0 0 5px #0a1f6b,0 0 36px rgba(255,184,0,.55),0 14px 0 -2px #a85d00,0 22px 30px #000a;animation:frameIn .55s cubic-bezier(.2,1.4,.4,1)}
+.frame img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.frame::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.25) 50%,transparent 60%);transform:translateX(-120%);animation:shine 3.5s 1s infinite;pointer-events:none}
+@keyframes frameIn{from{opacity:0;transform:scale(.75) rotate(-4deg)}}@keyframes shine{60%,100%{transform:translateX(120%)}}
+.msg{position:absolute;left:8%;right:8%;top:50%;transform:translateY(-50%) scale(0);padding:12px;border-radius:18px;text-align:center;font-size:22px;font-weight:900;border:3px solid #fff;z-index:2;box-shadow:0 8px 24px #000a;transition:transform .35s cubic-bezier(.2,1.6,.4,1)}
+.msg.show{transform:translateY(-50%) scale(1)}.msg small{display:block;font-size:13px;font-weight:700;opacity:.95}
+.msg.ok{background:linear-gradient(#4be07a,#1c9a43)}.msg.bad{background:linear-gradient(#ff5a5a,#c01818)}.msg.time{background:linear-gradient(#ffb84a,#d9660a)}
+/* سؤال و گزینه‌ها */
+.ask{text-align:center;font-size:clamp(20px,6vw,26px);font-weight:900;color:var(--gold);text-shadow:0 3px 0 #1a2a8a,0 0 16px rgba(255,184,0,.5)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{min-height:clamp(50px,7.5dvh,64px);padding:8px 6px;border-radius:18px;font-weight:800;font-size:clamp(14px,4vw,17px);background:linear-gradient(#2a66ff,#0a2a9a);border:2px solid #7ab0ff;box-shadow:0 5px 0 #051a66,0 8px 14px #0006;transition:transform .08s,box-shadow .08s}
+.opt:active:not(:disabled){transform:translateY(4px);box-shadow:0 1px 0 #051a66}
+.opt:disabled{cursor:default}.opt.dim{filter:saturate(.5) brightness(.7)}
+.opt.right{background:linear-gradient(#4be07a,#1c9a43);border-color:#b8ffcc;box-shadow:0 5px 0 #0d5a26;filter:none}
+.opt.wrong{background:linear-gradient(#ff5a5a,#c01818);border-color:#ffb0b0;box-shadow:0 5px 0 #700a0a;filter:none;animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.next{width:100%;min-height:56px;border-radius:20px;font-size:20px;font-weight:900;color:#1a2a8a;background:linear-gradient(#ffd54a,#ff9800);border:2px solid #ffe38a;box-shadow:0 6px 0 #a85d00,0 10px 16px #0006;visibility:hidden}
+.next.show{visibility:visible;animation:pop .35s both}.next:active{transform:translateY(5px);box-shadow:0 1px 0 #a85d00}
+@keyframes pop{from{opacity:0;transform:scale(.8)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head>
+<body>
+<div class="game">
+ <header class="top">
+  <div class="right"><button class="back" id="back" aria-label="بازگشت">›</button><span class="pill">مرحله <b id="stage">۱</b></span></div>
+  <div class="ring" id="ring"><svg viewBox="0 0 76 76"><circle class="bg" cx="38" cy="38" r="31"/><circle class="fg" id="fg" cx="38" cy="38" r="31"/></svg><b id="sec">۲۰</b></div>
+  <div class="left"><span class="pill">🪙 <b id="coins">۰</b></span></div>
+ </header>
+ <section class="photo"><div class="frame"><img id="img" alt=""><div class="msg" id="msg"></div></div></section>
+ <h2 class="ask">این بازیکن کیست؟</h2>
+ <section class="opts" id="opts"></section>
+ <button class="next" id="next">سؤال بعدی ▶</button>
+</div>
+<script src="players-data.js"></script>
+<script>
+const TIME=20,REWARD=10,KEY='pq_save_v1',N=PLAYERS.length;
+const $=id=>document.getElementById(id),fa=n=>Number(n).toLocaleString('fa-IR');
+/* عکس موقت تا وقتی فایل بازیکن در پوشه‌ی players پیدا شود */
+const PH='data:image/svg+xml,'+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#2a5cff'/><stop offset='1' stop-color='#061a6e'/></linearGradient></defs><rect width='300' height='400' fill='url(#g)'/><circle cx='150' cy='140' r='58' fill='#fff' opacity='.88'/><path d='M36 400c0-96 52-146 114-146s114 50 114 146z' fill='#fff' opacity='.88'/><text x='150' y='360' font-size='80' font-weight='900' text-anchor='middle' fill='#1a2a8a' font-family='Tahoma'>؟</text></svg>");
+/* ذخیره: سکه، بالاترین مرحله‌ی باز، مراحل تمام‌شده */
+let sv={};try{sv=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){}
+let coins=sv.coins??1000,done=Array.isArray(sv.done)?sv.done:[],maxS=Math.min(N,Math.max(1,sv.maxStage||1));
+let stage=parseInt(new URLSearchParams(location.search).get('s'))||maxS;
+if(stage<1||stage>maxS)stage=maxS;
+const save=()=>{sv.coins=coins;sv.maxStage=maxS;sv.done=done;try{localStorage.setItem(KEY,JSON.stringify(sv));}catch(e){}};
+const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const C=2*Math.PI*31,fg=$('fg');fg.style.strokeDasharray=C;
+let cur,answered,lastOk,t0,raf;
+
+function show(){$('stage').textContent=fa(stage)+' / '+fa(N);$('coins').textContent=fa(coins);}
+function newQ(){
+  const p=PLAYERS[stage-1];
+  cur={p,opts:shuffle([p,...shuffle(PLAYERS.filter(x=>x!==p)).slice(0,3)])};answered=false;lastOk=false;
+  const img=$('img');img.src=PH;
+  const real=new Image();real.onload=()=>{if(cur.p===p)img.src=real.src;};real.src='players/'+encodeURI(p[0]);
+  $('opts').innerHTML=cur.opts.map((o,i)=>`<button class="opt" data-i="${i}">${o[1]}</button>`).join('');
+  $('msg').className='msg';$('next').className='next';show();startTimer();
+}
+function startTimer(){cancelAnimationFrame(raf);t0=performance.now();
+  const tick=now=>{const left=Math.max(0,TIME-(now-t0)/1000);
+    fg.style.strokeDashoffset=C*(1-left/TIME);$('sec').textContent=fa(Math.ceil(left));
+    $('ring').classList.toggle('low',left<=6);
+    if(left<=0)return finish(-1);raf=requestAnimationFrame(tick);};
+  raf=requestAnimationFrame(tick);}
+function finish(i){ /* i = شماره‌ی گزینه، یا -1 برای تمام‌شدن زمان */
+  if(answered)return;answered=true;cancelAnimationFrame(raf);
+  const ok=i>=0&&cur.opts[i]===cur.p,m=$('msg');lastOk=ok;
+  [...$('opts').children].forEach((b,k)=>{b.disabled=true;if(cur.opts[k]===cur.p)b.classList.add('right');else if(k===i)b.classList.add('wrong');else b.classList.add('dim');});
+  $('ring').classList.remove('low');
+  if(ok){const first=!done[stage-1];if(first)coins+=REWARD;done[stage-1]=1;maxS=Math.min(N,Math.max(maxS,stage+1));
+    m.className='msg ok show';m.innerHTML='🎉 تبریک! پاسخ صحیح<small>'+(first?'+'+fa(REWARD)+' سکه':'این مرحله را قبلاً برده‌ای')+'</small>';}
+  else if(i<0){m.className='msg time show';m.innerHTML='⏰ زمان تمام شد<small>پاسخ: '+cur.p[1]+'</small>';}
+  else{m.className='msg bad show';m.innerHTML='❌ پاسخ اشتباه!<small>پاسخ درست: '+cur.p[1]+'</small>';if(navigator.vibrate)navigator.vibrate(120);}
+  const n=$('next');n.textContent=ok?(stage>=N?'🏆 همه مراحل تمام شد':'مرحله بعد ▶'):'↻ تلاش دوباره';n.classList.add('show');
+  save();show();
+}
+$('opts').addEventListener('click',e=>{const b=e.target.closest('.opt');if(b&&!b.disabled)finish(+b.dataset.i);});
+$('next').addEventListener('click',()=>{if(!lastOk)return newQ();location.href=stage>=N?'levels.html':'game.html?s='+(stage+1);});
+$('back').addEventListener('click',()=>{location.href='levels.html';});
+newQ();
+</script></body></html>

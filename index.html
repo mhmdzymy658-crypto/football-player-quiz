@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#050d3a">
+<title>شناخت بازیکن</title>
+<style>
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+html,body{height:100%;overflow:hidden;background:#050d3a;font-family:Vazirmatn,Tahoma,system-ui,sans-serif}
+/* پس‌زمینه‌ی نوارهای کناری: همان عکس، محو و پرکننده (خود عکس دست‌نخورده می‌ماند) */
+body::before{content:"";position:fixed;inset:-20px;background:url(assets/images/entry-screen.webp) center/cover;filter:blur(22px) brightness(.5)}
+.screen{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden}
+/* پر کردن فضای خالی بالا و پایین: بالا انعکاس محوِ خود عکس، پایین ادامه‌ی رنگ لبه‌ی پایین عکس */
+.fill{position:absolute;left:0;right:0;pointer-events:none}
+.fill.top{bottom:100%;height:100%;-webkit-mask-image:linear-gradient(to top,#000 20%,transparent 100%);mask-image:linear-gradient(to top,#000 20%,transparent 100%)}
+.fill.top i{display:block;height:100%;background:url(assets/images/entry-screen.webp) top/100% 100% no-repeat;transform:scaleY(-1);filter:blur(3px) brightness(.8)}
+.fill.bot{top:100%;height:100%;background:linear-gradient(#090c24 0,#06091c 40%,#04081a 100%)}
+/* قاب عکس: بدون کشیدگی، با نسبت ۲:۳ و جا شدن کامل در صفحه */
+.entry{position:relative;width:min(100vw,calc(100dvh * 2 / 3));aspect-ratio:2/3;box-shadow:0 0 40px #000a}
+.entry img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;-webkit-user-drag:none}
+/* ناحیه‌های کلیک نامرئی روی دکمه‌های داخل عکس */
+.hit{position:absolute;border:0;background:transparent;border-radius:18px;cursor:pointer;outline:none;transition:background .12s,transform .1s}
+.hit:active{background:rgba(255,255,255,.22);transform:scale(.97)}
+.hit:focus-visible{outline:3px solid #ffd54a}
+#toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translate(-50%,30px);max-width:88vw;padding:10px 20px;border-radius:20px;background:#000d;color:#fff;font-size:14px;opacity:0;pointer-events:none;transition:.3s}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="screen"><div class="entry" id="entry"><div class="fill top"><i></i></div><div class="fill bot"></div><img src="assets/images/entry-screen.webp" alt="شناخت بازیکن" draggable="false"></div></div>
+<div id="toast"></div>
+<script>
+/* مختصات بر اساس عکس ۱۰۲۴×۱۵۳۶ پیکسل: [x, y, عرض, ارتفاع, نام، برچسب] */
+const HOTSPOTS=[
+ [25,15,340,135,'profile','پروفایل'],
+ [430,22,225,58,'shop','سکه'],
+ [680,22,220,58,'leaderboard','امتیاز'],
+ [928,18,72,74,'settings','تنظیمات'],
+ [35,715,525,195,'start','شروع بازی'],
+ [570,715,428,195,'levels','لیست مراحل'],
+ [42,935,226,140,'shop','فروشگاه'],
+ [288,935,220,140,'daily','جوایز روزانه'],
+ [525,935,220,140,'leaderboard','رتبه‌بندی'],
+ [762,935,218,140,'items','آیتم‌ها'],
+ [42,1092,226,140,'help','راهنما'],
+ [288,1092,220,140,'achievements','دستاوردها'],
+ [525,1092,220,140,'about','درباره بازی'],
+ [762,1092,218,140,'share','اشتراک‌گذاری'],
+ [0,1405,258,131,'home','خانه'],
+ [262,1405,246,131,'stats','آمار'],
+ [512,1405,246,131,'achievements','موفقیت‌ها'],
+ [762,1405,262,131,'more','بازی‌های بیشتر']
+];
+/* وقتی صفحه‌ی هر بخش ساخته شد، مسیرش را اینجا بنویسید. مثلاً: start:'pages/game.html' */
+const ROUTES={start:'game.html',levels:'levels.html'};
+
+const W=1024,H=1536,entry=document.getElementById('entry'),toast=document.getElementById('toast');
+function say(t){toast.textContent=t;toast.className='show';clearTimeout(say.t);say.t=setTimeout(()=>toast.className='',2000);}
+async function share(){
+  const d={title:'شناخت بازیکن',text:'بازی شناخت بازیکن (فوتبال کویز) را امتحان کن!'};
+  try{if(navigator.share)await navigator.share(d);else{await navigator.clipboard.writeText(d.text);say('متن اشتراک کپی شد');}}catch(e){}
+}
+function open(name){
+  if(name==='share')return share();
+  if(name==='home')return;
+  if(ROUTES[name])return void(location.href=ROUTES[name]);
+  say('این بخش در مرحله بعد ساخته می‌شود');
+}
+HOTSPOTS.forEach(([x,y,w,h,name,label])=>{
+  const b=document.createElement('button');
+  b.className='hit';b.type='button';b.setAttribute('aria-label',label);
+  b.style.cssText=`left:${x/W*100}%;top:${y/H*100}%;width:${w/W*100}%;height:${h/H*100}%`;
+  b.addEventListener('click',()=>{if(navigator.vibrate)navigator.vibrate(20);open(name);});
+  entry.appendChild(b);
+});
+</script>
+</body>
+</html>

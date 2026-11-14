@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#050d3a"><title>شناخت بازیکن - مراحل</title>
+<style>
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+html,body{height:100%;overflow:hidden;background:#050d3a;color:#fff;font-family:Vazirmatn,Tahoma,system-ui,sans-serif}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.page{position:fixed;inset:0;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 8px) 12px calc(env(safe-area-inset-bottom) + 8px);
+ background:radial-gradient(ellipse at 15% 0,rgba(130,185,255,.7),transparent 42%),radial-gradient(ellipse at 85% 0,rgba(255,225,130,.5),transparent 42%),linear-gradient(#0a2a9a,#050d3a 70%)}
+.bar{display:flex;align-items:center;gap:10px;padding:6px 0 12px}.bar h1{flex:1;font-size:22px;font-weight:900;color:#ffb800;text-shadow:0 3px 0 #1a2a8a}
+.back{width:40px;height:40px;border-radius:12px;background:#1b4fe0;border:2px solid #6aa5ff;font-size:28px;line-height:1;box-shadow:0 3px 0 #051a66}
+.pill{padding:6px 12px;border-radius:20px;font-weight:800;font-size:14px;background:rgba(10,30,110,.65);border:1px solid #4a7dff}
+.sub{text-align:center;font-size:13px;opacity:.85;margin-bottom:10px}
+.grid{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-content:start;padding:2px 2px 16px}
+.lv{position:relative;aspect-ratio:1;display:grid;place-items:center;align-content:center;border-radius:22px;border:2px solid #ffe38a;color:#1a2a8a;
+ background:linear-gradient(160deg,#ffd54a,#ff9800);box-shadow:0 6px 0 #a85d00,0 10px 16px #0006;animation:pop .4s both;animation-delay:var(--d)}
+.lv b{font-size:34px;font-weight:900;line-height:1}.lv small{font-size:12px;font-weight:800;margin-top:4px}
+.lv.done{background:linear-gradient(160deg,#4be07a,#1c9a43);border-color:#b8ffcc;box-shadow:0 6px 0 #0d5a26,0 10px 16px #0006;color:#fff}
+.lv.lock{background:linear-gradient(160deg,#3a4a8a,#1c2658);border-color:#5a6ab0;box-shadow:0 6px 0 #0c1440;color:#aab;filter:saturate(.6)}
+.lv:not(.lock):active{transform:translateY(4px)}
+@keyframes pop{from{opacity:0;transform:scale(.6) translateY(20px)}}
+#toast{position:fixed;left:50%;bottom:calc(30px + env(safe-area-inset-bottom));transform:translate(-50%,30px);padding:10px 20px;border-radius:20px;background:#000d;opacity:0;pointer-events:none;transition:.3s;font-size:14px}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head>
+<body><div class="page">
+ <div class="bar"><button class="back" id="back" aria-label="بازگشت">›</button><h1>لیست مراحل</h1><span class="pill">🪙 <b id="coins"></b></span></div>
+ <p class="sub" id="sub"></p><div class="grid" id="grid"></div>
+</div><div id="toast"></div>
+<script src="players-data.js"></script>
+<script>
+const KEY='pq_save_v1',N=PLAYERS.length,fa=n=>Number(n).toLocaleString('fa-IR'),$=id=>document.getElementById(id);
+let sv={};try{sv=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){}
+const done=Array.isArray(sv.done)?sv.done:[],maxS=Math.min(N,Math.max(1,sv.maxStage||1));
+$('coins').textContent=fa(sv.coins??1000);
+$('sub').textContent=fa(done.filter(Boolean).length)+' از '+fa(N)+' مرحله تمام شده';
+$('grid').innerHTML=PLAYERS.map((p,i)=>{const n=i+1,d=done[i],u=n<=maxS;
+ return `<button class="lv ${d?'done':''} ${u?'':'lock'}" data-n="${n}" style="--d:${i*35}ms"><b>${fa(n)}</b><small>${d?'✓ تمام شد':u?'بازی کن':'🔒'}</small></button>`}).join('');
+$('grid').addEventListener('click',e=>{const b=e.target.closest('.lv');if(!b)return;
+ if(b.classList.contains('lock')){const t=$('toast');t.textContent='ابتدا مرحله قبل را درست جواب بده';t.className='show';setTimeout(()=>t.className='',1800);return;}
+ location.href='game.html?s='+b.dataset.n;});
+$('back').addEventListener('click',()=>{location.href='index.html';});
+</script></body></html>
